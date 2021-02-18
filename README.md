@@ -4,11 +4,11 @@ GReact is a framework for creating and managing scene graphs declaratively in th
 
 ### What does that mean?
 
-Rather than explicitly creating `Node`s and managing their state and transitions, you instead make a function which essentially takes, as arguments, the current state relevant to the `Node` and it's children, and returns how the `Node` and it's children should look given that state.
+Rather than explicitly creating `Node`s and managing their state and transitions, you instead make a function which essentially takes, as arguments, the current state relevant to the `Node` and its children, and returns how the `Node` and its children should look given that state.
 
 ### Why is this better?
 
-The traditional way of building the scene graph is extremely error prone. Since each `Node` is managing it's own state, and the various events that affect it could arrive with hard to predict timing, it's extremely difficult to make sure that it handles all possible cases elegantly and can't get into a bad or confused state, which results in bugs.
+The traditional way of building the scene graph is extremely error prone. Since each `Node` is managing its own state, and the various events that affect it could arrive with hard to predict timing, it's extremely difficult to make sure that it handles all possible cases elegantly and can't get into a bad or confused state, which results in bugs.
 
 This system allows you to put all the game state in a centralized store, which is a definitive source of truth. There are many ways to manage this centralized state, and GReact isn't particularly opinionated about that, but the important part is that there is one source of truth for what the entire game world looks like at this moment, and GReact updates the scene graph every frame to match that source of truth.
 
@@ -42,7 +42,7 @@ See the [Overview](Docs/overview.md), which gives a high level, but fairly compl
 
 Pull requests welcome!
 
-To contribute to GReact, follow the standard GitHub process: create a fork, make your changes, and then make a pull request. It will be reviewed, and some alterations may be request, but if and when it's aproved, it'll be integrated.
+To contribute to GReact, follow the standard GitHub process: create a fork, make your changes, and then make a pull request. It will be reviewed, and some alterations may be request, but if and when it's approved, it'll be integrated.
 
 Please follow the coding style already in use.
 
