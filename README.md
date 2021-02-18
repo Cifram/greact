@@ -32,16 +32,7 @@ GReact is actually intended to be used for both the UI and the game scene graph.
 
 # How to Install GReact
 
-First, GReact makes use of C#8 features, which means that it requires at least Unity 2020.2 or later.
-
-There are two separate libraries included. They are:
-
-* GReact - The core library that defines GReact itself, but includes no components.
-* UReactUnityComponents - An incomplete set of GReact components representing some of the most commonly used Unity components. This is technically optional, but you probably want it.
-
-If you just want GReact itself, copy the `Assets/GReact/` directory to somewhere inside your `Assets/` directory. If you also want UReactUnityComponents, then also copy the `Assets/UReactUnityComponents/` directory to the same place.
-
-It's recommended that you create a directory for all third party libraries, like say `Assets/ThirdParty/`, and put these directories in there, but the exact organization is up to you.
+Copy the `GReact` directory from this repo into your project. That's it!
 
 # How to Use GReact
 
