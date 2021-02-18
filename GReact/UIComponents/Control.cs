@@ -10,19 +10,7 @@ namespace GReact {
 	}
 
 	public static class ControlComponent {
-		public static Element New(string key, ControlProps props) =>
-			Element<ControlProps>.New(key, props,
-				(props) => {
-					var control = new Godot.Control();
-					CopyToNode(control, props);
-					return control;
-				},
-				(node, oldProps, props) => {
-					if (!oldProps.Equals(props) && node is Godot.Control control) {
-						CopyToNode(control, props);
-					}
-				}
-			);
+		public static Element New(string key, ControlProps props) => Element<ControlProps>.New(key, props, CreateNode, ModifyNode);
 
 		public static void CopyToNode(Godot.Control control, IControlProps props) {
 			control.AnchorTop = props.vert.anchorStart;
@@ -33,6 +21,18 @@ namespace GReact {
 			control.MarginBottom = props.vert.marginEnd;
 			control.MarginLeft = props.horiz.marginStart;
 			control.MarginRight = props.horiz.marginEnd;
+		}
+
+		private static Godot.Node CreateNode(ControlProps props) {
+			var control = new Godot.Control();
+			CopyToNode(control, props);
+			return control;
+		}
+
+		private static void ModifyNode(Godot.Node node, ControlProps oldProps, ControlProps props) {
+			if (!oldProps.Equals(props) && node is Godot.Control control) {
+				CopyToNode(control, props);
+			}
 		}
 	}
 }
