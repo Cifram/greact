@@ -36,8 +36,7 @@ Copy the `GReact` directory from this repo into your project. That's it!
 
 # How to Use GReact
 
-We provide two documents to help you learn how to use GReact:
-- [Overview](Docs/overview.md) - The overview will give a high level, but fairly complete, description of how GReact works and how you should use it.
+See the [Overview](Docs/overview.md), which gives a high level, but fairly complete, description of how GReact works and how you should use it.
 
 # Contributing
 
