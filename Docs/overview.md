@@ -12,9 +12,9 @@ In order to accomplish this, GReact creates the illusion that you're rebuilding 
 
 Core to GReact is the relationship between components, `Element`s and `Node`s.
 
-A component, really, is just a function, which builds a portion of the scene graph, a `Node` and it's children, given some current state. It does this by taking the state as arguments, and returning an `Element`, where an `Element` is a lightweight representation of a `Node`. That `Element` can, of course, have child `Element`s, which can be defined directly by this component, or by other components called by this one.
+A component, really, is just a function, which builds a portion of the scene graph, a `Node` and its children, given some current state. It does this by taking the state as arguments, and returning an `Element`, where an `Element` is a lightweight representation of a `Node`. That `Element` can, of course, have child `Element`s, which can be defined directly by this component, or by other components called by this one.
 
-The class that pulls this all together is the `Renderer`. Create a `GReact.Renderer` to represent a scene graph you want to manage with GReact, and call `Render` on it, passing in an `Element` for the root node, and the `Node` that you want it to be parented to. It will build the actual Godot scene graph from that. When you call `Render` on this same renderer again, it will build up the updated scene graph of `Element`s, and compare it to the one from the last time it was called, and use that comparison to update the actual Godot scene graph, only where required.
+The class that pulls this all together is the `Renderer`. Create a `GReact.Renderer` to represent a scene graph you want to manage with GReact, and call `Render` on it, passing in an `Element` for the root node, and the `Node` that you want it to be parented to. It will build the actual Godot scene graph from that. When you call `Render` on this same renderer again, it will build up the updated scene graph of `Element`s, compare it to the one from the last time it was called, and use that comparison to update the actual Godot scene graph, only where required.
 
 # Components
 
@@ -37,7 +37,7 @@ ButtonComponent.New("MyButton", new ButtonProps {
 
 How the `horiz` and `vert` props work with `UIDim`, and how `Signal` works, will be covered in later sections. The important part is the general structure of how you instantiate a standard node component. The reason for the props struct, instead of just taking all the properties directly as function arguments, is so the props can be stored in the newly created `Element` and saved, which allows them to be compared with the props from the matching `Element` from the last frame to understand what has changed.
 
-Composite components do not technically need to use a props struct, because they're not directly constructing an `Element`s. They just take whatever state they need directly as function arguments. However, by convention, they still use props structs, for consistency. Using a composite component should feel indistinguishable from using a node component.
+Composite components do not technically need to use a props struct because they're not directly constructing an `Element`. They just take whatever state they need directly as function arguments. However, by convention and for consistency, they still use props structs. Using a composite component should feel indistinguishable from using a node component.
 
 So let's see an example of a simple composite component:
 
@@ -45,15 +45,15 @@ So let's see an example of a simple composite component:
 using GReact;
 
 public struct ThingyProps {
-  int id;
-  string label1;
-  string label2
+  public int id;
+  public string label1;
+  public string label2;
 }
 
 public static class ThingComponent {
   public static Element New(ThingyProps props) {
     return HBoxContainerComponent.New($"Thingy-{props.id}", new HBoxContainerProps {
-      vart = UIDim.JustifyExpand(0, 0),
+      vert = UIDim.JustifyExpand(0, 0),
       horiz = UIDim.JustifyExpand(0, 0),
     }).Child(
       LabelComponent.New($"Thingy-{props.id}-Label1", new LabelProps {
@@ -68,9 +68,9 @@ public static class ThingComponent {
 }
 ```
 
-This creates an `HBoxContainer` with two `Label`s as children. Again, the usage `UIDim` will be explained later, suffice it to say this will cause the `HBoxContainer` to expand to fill it's entire parent region. Note the calls to the `Child` function on `Element`. After an element is returned by calling another component, be it a node or composite component, you can call `Child` on it, and pass in another `Element`, to add that `Element` as a child, and the `Child` method returns the original element, so you can chain these calls.
+This creates an `HBoxContainer` with two `Label`s as children. Again, the usage `UIDim` will be explained later, suffice it to say this will cause the `HBoxContainer` to expand to fill its entire parent region. Note the calls to the `Child` function on `Element`. After an element is returned by calling another component, be it a node or composite component, you can call `Child` on it, and pass in another `Element`, to add that `Element` as a child, and the `Child` method returns the original element, so you can chain these calls.
 
-A note about the key passed in to each node component: this key needs to globally unique. This is how GReact figures out that which `Element` this frame corresponds to the same `Element` in the previous frame, even if it's in a different part of the scene graph. If two `Element`s are given the same key, it can't maintain proper consistency between frames, and thus will throw an exception.
+A note about the key passed in to each node component: this key needs to be globally unique. This is how GReact figures out that which `Element` this frame corresponds to the same `Element` in the previous frame, even if it's in a different part of the scene graph. If two `Element`s are given the same key, it can't maintain proper consistency between frames, and thus will throw an exception.
 
 # Renderer and Dispatcher
 
@@ -103,7 +103,7 @@ public class Dispatcher : Godot.Node {
 
 Where `StateStore` is a stand-in for whatever class you create for managing your global state.
 
-It's quite possible and sometimes sensible to maintain more than one renderer. Each one will maintain it's own section of the Godot scene graph, parented to whatever parent `Node` you provide to the `Render` function. An example of where this might make sense is having one renderer for the game geometry, and another one for the UI. Or, if you need to run two scenes in parallel on split screen, giving each one it's own renderer might make sense. It's up to you to decide what makes the most sense for your circumstances.
+It's quite possible and sometimes sensible to maintain more than one renderer. Each one will maintain its own section of the Godot scene graph, parented to whatever parent `Node` you provide to the `Render` function. An example of where this might make sense is having one renderer for the game geometry and another one for the UI. Or, if you need to run two scenes in parallel on split screen, giving each one its own renderer might make sense. It's up to you to decide what makes the most sense for your circumstances.
 
 # Signals
 
