@@ -37,7 +37,7 @@ ButtonComponent.New("MyButton", new ButtonProps {
 
 How the `horiz` and `vert` props work with `UIDim`, and how `Signal` works, will be covered in later sections. The important part is the general structure of how you instantiate a standard node component. The reason for the props struct, instead of just taking all the properties directly as function arguments, is so the props can be stored in the newly created `Element` and saved, which allows them to be compared with the props from the matching `Element` from the last frame to understand what has changed.
 
-Composite components do not technically need to use a props struct because they're not directly constructing an `Element`. They just take whatever state they need directly as function arguments. However, by convention and for consistency, they still use props structs. Using a composite component should feel indistinguishable from using a node component.
+Composite components do not technically need to use a props struct because they're not directly constructing an `Element`. They could just take whatever state they need directly as function arguments. However, by convention and for consistency, they still use props structs. Using a composite component should feel indistinguishable from using a node component.
 
 So let's see an example of a simple composite component:
 
