@@ -8,7 +8,7 @@ namespace GReact {
 	}
 
 	public static class ButtonComponent {
-		public static IElement New(string key, ButtonProps props) =>
+		public static Element New(string key, ButtonProps props) =>
 			Element<ButtonProps>.New(key, props,
 				(props) => {
 					var control = new Godot.Button();

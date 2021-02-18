@@ -10,7 +10,7 @@ namespace GReact {
 	}
 
 	public static class ControlComponent {
-		public static IElement New(string key, ControlProps props) =>
+		public static Element New(string key, ControlProps props) =>
 			Element<ControlProps>.New(key, props,
 				(props) => {
 					var control = new Godot.Control();

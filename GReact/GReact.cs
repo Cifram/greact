@@ -6,19 +6,19 @@ namespace GReact {
 	public class Renderer {
 		private PopulatedElement? oldGraph;
 
-		public void Render(Godot.Node parent, IElement newGraph) {
+		public void Render(Godot.Node parent, Element newGraph) {
 			if (oldGraph == null) {
 				oldGraph = BuildFirstTimeGraph(newGraph, parent, null);
 			} else {
 				// Build dictionaries of new and old elements indexed by key, to diff against
 				var oldElemDict = new Dictionary<string, PopulatedElement>();
-				var newElemDict = new Dictionary<string, (IElement, string?)>();
+				var newElemDict = new Dictionary<string, (Element, string?)>();
 				FillOldElemDict(oldElemDict, oldGraph.Value);
 				FillNewElemDict(newElemDict, newGraph);
 
 				// Build the creation, move and update queues, by iterating over the new
 				// elements and comparing to the old ones
-				var creationQueue = new List<(IElement, string?)>();
+				var creationQueue = new List<(Element, string?)>();
 				var moveQueue = new List<(string, string?)>();
 				var updateQueue = new List<string>();
 				foreach (var newElem in newElemDict) {
@@ -93,7 +93,7 @@ namespace GReact {
 			}
 		}
 
-		private PopulatedElement PopulateGraph(IElement elem, Dictionary<string, PopulatedElement> popElems) {
+		private PopulatedElement PopulateGraph(Element elem, Dictionary<string, PopulatedElement> popElems) {
 			var popElem = popElems[elem.key];
 			popElem.children = elem.children.Select(child => PopulateGraph(child, popElems)).ToArray();
 			return popElem;
@@ -106,7 +106,7 @@ namespace GReact {
 			}
 		}
 
-		private void FillNewElemDict(Dictionary<string, (IElement, string?)> dict, IElement elem, string? parentKey = null) {
+		private void FillNewElemDict(Dictionary<string, (Element, string?)> dict, Element elem, string? parentKey = null) {
 			if (dict.ContainsKey(elem.key)) {
 				throw new Exception($"Two GReact elements have the key {elem.key}");
 			}
@@ -116,7 +116,7 @@ namespace GReact {
 			}
 		}
 
-		private PopulatedElement BuildFirstTimeGraph(IElement elem, Godot.Node parentNode, string? parentKey) {
+		private PopulatedElement BuildFirstTimeGraph(Element elem, Godot.Node parentNode, string? parentKey) {
 			var newElem = elem.Render(null);
 			parentNode.AddChild(newElem.node);
 			newElem.parentKey = parentKey;
@@ -128,31 +128,31 @@ namespace GReact {
 	public delegate Godot.Node CreateNode<PropT>(PropT props) where PropT : struct;
 	public delegate void ModifyNode<PropT>(Godot.Node node, PropT oldProps, PropT props) where PropT : struct;
 
-	public interface IElement {
-		IElement Child(IElement child);
+	public interface Element {
+		Element Child(Element child);
 		PopulatedElement Render(PopulatedElement? old);
 		string key { get; }
-		List<IElement> children { get; }
+		List<Element> children { get; }
 	}
 
-	public struct Element<PropT> : IElement where PropT : struct {
+	public struct Element<PropT> : Element where PropT : struct {
 		public string key { get; set; }
-		public List<IElement> children { get; set; }
+		public List<Element> children { get; set; }
 		public PropT props;
 		public CreateNode<PropT> createNode;
 		public ModifyNode<PropT> modifyNode;
 
-		public static IElement New(string key, PropT props, CreateNode<PropT> createNode, ModifyNode<PropT> modifyNode) {
+		public static Element New(string key, PropT props, CreateNode<PropT> createNode, ModifyNode<PropT> modifyNode) {
 			return new Element<PropT> {
 				key = key,
 				props = props,
 				createNode = createNode,
 				modifyNode = modifyNode,
-				children = new List<IElement>(),
+				children = new List<Element>(),
 			};
 		}
 
-		public IElement Child(IElement child) {
+		public Element Child(Element child) {
 			children.Add(child);
 			return this;
 		}
@@ -186,12 +186,12 @@ namespace GReact {
 	}
 
 	public struct PopulatedElement {
-		public IElement elem;
+		public Element elem;
 		public Godot.Node node;
 		public PopulatedElement[] children;
 		public string? parentKey;
 
-		public PopulatedElement(IElement element, Godot.Node node) {
+		public PopulatedElement(Element element, Godot.Node node) {
 			this.elem = element;
 			this.node = node;
 			this.children = new PopulatedElement[0];

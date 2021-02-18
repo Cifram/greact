@@ -8,7 +8,7 @@ namespace GReact {
 	}
 
 	public static class VBoxContainerComponent {
-		public static IElement New(string key, VBoxContainerProps props) =>
+		public static Element New(string key, VBoxContainerProps props) =>
 			Element<VBoxContainerProps>.New(key, props,
 				(props) => {
 					var control = new Godot.VBoxContainer();
