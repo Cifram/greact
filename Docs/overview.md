@@ -137,6 +137,18 @@ public static class MyButtonComponent {
 
 As you see here, you can generally just reuse the component's props struct to pass on to the callback, and declare the callback as a `private static` function on the same class as your component's `New` function. So it's all much simpler in practice than it might sound in the description.
 
+# UI Positioning
+
+Godot's system for manually positioning UI elements is very flexible, but it requires specifying 8 numbers for each `Node` in the UI (an anchor value and a margin value for top, bottom, left and right), and the correct values for these numbers is sometimes hard to think about. So GReact provides some convenient shortcuts for the common use cases.
+
+The `UIDim` class encompasses the positioning along one axis. It stores a `startAnchor`, `endAnchor`, `startMargin` and `endMargin`, where start is left or top, and end is right or bottom, depending on whether it's horizontal or vertical. Every control takes a `UIDim vert` property and a `UIDim horiz` property. Where this saves you time and effort is through a set of static functions that serve as specialized constructors for `UIDim`:
+
+- `UIDim.Start(size)` - Justifies the control to the left or top, with the specified size. Equivalent to `UIDim.Custom(0, 0, 0, size)`.
+- `UIDim.End(size)` - Justify the control to the right or bottom, with the specified size. Equivalent to `UIDim.Custom(1, 1, -size, 0)`.
+- `UIDim.Center(size)` - Centers the control, with the specified size. Equivalent to `UIDim.Custom(0.5f, 0.5f, -size/2, size/2)`.
+- `UIDim.Expand(start, end)` - Makes the control expand to fit the container, with the specified margins at the start and end. Equivalent to `UIDim.Custom(0, 1, start, -end)`.
+- `UIDim.Custom(startAnchor, endAnchor, startMargin, endMargin)` - Sets the values directly, for when you need to do something special.
+
 # Rules of Good GReact
 
 Now that you've got the structure of GReact down, there are some very important rules to understand for any code that interacts with GReact. Breaking these rules breaks the GReact paradigm, and will tend to cause things to not function properly.

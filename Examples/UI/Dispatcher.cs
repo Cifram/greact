@@ -4,8 +4,8 @@ namespace UIExample {
 
 		public override void _Process(float delta) {
 			renderer.Render(this, GReact.ButtonComponent.New("button", new GReact.ButtonProps {
-				vert = GReact.UIDim.JustifyCenter(20),
-				horiz = GReact.UIDim.JustifyCenter(100),
+				vert = GReact.UIDim.Center(20),
+				horiz = GReact.UIDim.Center(100),
 				text = "Push Me",
 				pressed = GReact.Signal.New(OnButtonPress),
 			}));

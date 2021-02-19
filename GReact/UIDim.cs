@@ -5,28 +5,28 @@ namespace GReact {
 		public float marginStart;
 		public float marginEnd;
 
-		public static UIDim JustifyStart(float size) =>
+		public static UIDim Start(float size) =>
 			new UIDim {
 				anchorStart = 0,
 				anchorEnd = 0,
 				marginStart = 0,
 				marginEnd = size,
 			};
-		public static UIDim JustifyEnd(float size) =>
+		public static UIDim End(float size) =>
 			new UIDim {
 				anchorStart = 1,
 				anchorEnd = 1,
 				marginStart = -size,
 				marginEnd = 0,
 			};
-		public static UIDim JustifyCenter(float size) =>
+		public static UIDim Center(float size) =>
 			new UIDim {
 				anchorStart = 0.5f,
 				anchorEnd = 0.5f,
 				marginStart = -size/2,
 				marginEnd = size/2,
 			};
-		public static UIDim JustifyExpand(float marginStart, float marginEnd) =>
+		public static UIDim Expand(float marginStart, float marginEnd) =>
 			new UIDim {
 				anchorStart = 0,
 				anchorEnd = 1,
