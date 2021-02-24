@@ -5,6 +5,9 @@ using System.Linq;
 namespace GReact {
 	public class Renderer {
 		private PopulatedElement? oldRootElem;
+		public int nodesCreated { get; private set; }
+		public int nodesDestroyed { get; private set; }
+		public bool trackNodeChurn = false;
 
 		private PopulatedElement Render(PopulatedElement? parent, int id, PopulatedElement? oldPopElem, Element elem) {
 			var popElem = elem.Render(oldPopElem);
@@ -22,11 +25,17 @@ namespace GReact {
 			}
 
 			if (oldPopElem == null) {
+				if (trackNodeChurn) {
+					nodesCreated++;
+				}
 				parent?.node.AddChild(popElem.node);
 				popElem.node.Name = $"{popElem.node.GetType()}-{id}";
 			} else {
 				var keysToRemove = oldPopElem.Value.children.Keys.Where(key => !popElem.children.ContainsKey(key)).ToArray();
 				foreach (var key in keysToRemove) {
+					if (trackNodeChurn) {
+						nodesDestroyed += GetNodeHierarchySize(oldPopElem.Value.children[key].node);
+					}
 					oldPopElem.Value.children[key].node.QueueFree();
 				}
 
@@ -41,11 +50,22 @@ namespace GReact {
 		}
 
 		public void Render(Godot.Node parent, Element elem) {
+			nodesCreated = 0;
+			nodesDestroyed = 0;
+
 			var popElem = Render(null, 0, oldRootElem, elem);
 			if (oldRootElem == null) {
 				parent.AddChild(popElem.node);
 			}
 			oldRootElem = popElem;
+		}
+
+		private int GetNodeHierarchySize(Godot.Node node) {
+			var size = 1;
+			for (int i = 0; i < node.GetChildCount(); i++) {
+				size += GetNodeHierarchySize(node.GetChild(i));
+			}
+			return size;
 		}
 	}
 
