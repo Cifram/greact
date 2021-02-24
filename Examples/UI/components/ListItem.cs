@@ -1,4 +1,3 @@
-using System;
 using Godot;
 using GReact;
 
@@ -6,6 +5,7 @@ namespace UIExample {
 	public struct ListItemProps {
 		public string text;
 		public Signal onDelete;
+		public Signal<string> onChange;
 	}
 
 	public static class ListItemComponent {
@@ -13,9 +13,10 @@ namespace UIExample {
 			HBoxContainerComponent.New(new HBoxContainerProps {
 				sizeFlagsHoriz = Control.SizeFlags.ExpandFill,
 			}).Child(
-				LabelComponent.New(new LabelProps {
+				LineEditComponent.New(new LineEditProps {
 					sizeFlagsHoriz = Control.SizeFlags.ExpandFill,
 					text = props.text,
+					onTextChanged = props.onChange,
 				})
 			).Child(
 				ButtonComponent.New(new ButtonProps {

@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 using GReact;
 
@@ -15,11 +16,12 @@ namespace UIExample {
 				sizeFlagsHoriz = Control.SizeFlags.ExpandFill,
 			});
 
-			foreach (var name in props.column.items) {
+			foreach (var (name, i) in props.column.items.Select((name, i) => (name, i))) {
 				mainList.Child(
 					ListItemComponent.New(new ListItemProps {
 						text = name,
 						onDelete = Signal.New(OnRemoveItem, (props.column, name)),
+						onChange = Signal<string>.New(OnChangeItem, (props.column, i)),
 					})
 				);
 			}
@@ -53,6 +55,10 @@ namespace UIExample {
 
 		private static void OnAddItem(ListProps props) {
 			props.column.items.Add("New Item");
+		}
+
+		private static void OnChangeItem((Column, int) props, string newValue) {
+			props.Item1.items[props.Item2] = newValue;
 		}
 	}
 }
