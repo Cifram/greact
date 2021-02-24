@@ -19,7 +19,7 @@ namespace UIExample {
 				mainList.Child(
 					ListItemComponent.New(new ListItemProps {
 						text = name,
-						onDelete = Signal.New((props.column, name), OnRemoveItem),
+						onDelete = Signal.New(OnRemoveItem, (props.column, name)),
 					})
 				);
 			}
@@ -33,7 +33,7 @@ namespace UIExample {
 				}).Child(
 					ButtonComponent.New(new ButtonProps {
 						text = "Add Item",
-						pressed = Signal.New(props, OnAddItem),
+						pressed = Signal.New(OnAddItem, props),
 						sizeFlagsHoriz = Control.SizeFlags.ExpandFill,
 					})
 				).Child(

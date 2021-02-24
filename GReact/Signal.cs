@@ -38,7 +38,7 @@ namespace GReact {
 			private PropT props;
 			private Action<PropT> callback;
 
-			public SpecializedSignal(PropT props, Action<PropT> callback) {
+			public SpecializedSignal(Action<PropT> callback, PropT props) {
 				this.props = props;
 				this.callback = callback;
 			}
@@ -67,13 +67,13 @@ namespace GReact {
 		public override abstract bool Equals(object other);
 		public abstract override int GetHashCode();
 
-		public static Signal New<PropT>(PropT props, Action<PropT> callback) where PropT : notnull {
+		public static Signal New<PropT>(Action<PropT> callback, PropT props) where PropT : notnull {
 			LambdaChecker.Check(callback);
-			return new SpecializedSignal<PropT>(props, callback);
+			return new SpecializedSignal<PropT>(callback, props);
 		}
 		public static Signal New(Action callback) {
 			LambdaChecker.Check(callback);
-			return new SpecializedSignal<CallbackHolder>(new CallbackHolder { callback = callback }, CallCallback);
+			return new SpecializedSignal<CallbackHolder>(CallCallback, new CallbackHolder { callback = callback });
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -98,7 +98,7 @@ namespace GReact {
 			private PropT props;
 			private Action<PropT, Arg1T> callback;
 
-			public SpecializedSignal(PropT props, Action<PropT, Arg1T> callback) {
+			public SpecializedSignal(Action<PropT, Arg1T> callback, PropT props) {
 				this.props = props;
 				this.callback = callback;
 			}
@@ -127,13 +127,13 @@ namespace GReact {
 		public override abstract bool Equals(object other);
 		public abstract override int GetHashCode();
 
-		public static Signal<Arg1T> New<PropT>(PropT props, Action<PropT, Arg1T> callback) where PropT : notnull {
+		public static Signal<Arg1T> New<PropT>(Action<PropT, Arg1T> callback, PropT props) where PropT : notnull {
 			LambdaChecker.Check(callback);
-			return new SpecializedSignal<PropT>(props, callback);
+			return new SpecializedSignal<PropT>(callback, props);
 		}
 		public static Signal<Arg1T> New(Action<Arg1T> callback) {
 			LambdaChecker.Check(callback);
-			return new SpecializedSignal<CallbackHolder>(new CallbackHolder { callback = callback }, CallCallback);
+			return new SpecializedSignal<CallbackHolder>(CallCallback, new CallbackHolder { callback = callback });
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

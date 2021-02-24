@@ -126,7 +126,7 @@ public static class MyButtonComponent {
       vert = UIDim.JustifyCenter(20),
       horiz = UIDim.JustifyCenter(100),
       text = "Press Me!",
-      pressed = Signal.New(props, OnButtonPress),
+      pressed = Signal.New(OnButtonPress, props),
     })
   }
 

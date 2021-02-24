@@ -17,7 +17,7 @@ namespace UIExample {
 					ListComponent.New(new ListProps {
 						id = columnKey,
 						column = props.state.columns[columnKey],
-						onDelete = Signal.New((props.state, columnKey), OnRemoveColumn),
+						onDelete = Signal.New(OnRemoveColumn, (props.state, columnKey)),
 					})
 				);
 			}
@@ -25,7 +25,7 @@ namespace UIExample {
 			root.Child(
 				ButtonComponent.New(new ButtonProps {
 					text = "New Column",
-					pressed = Signal.New(props, OnNewColumn),
+					pressed = Signal.New(OnNewColumn, props),
 				})
 			);
 
