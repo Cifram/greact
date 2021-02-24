@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace GReact {
@@ -28,7 +29,7 @@ namespace GReact {
 		}
 	}
 
-	public abstract class Signal : Godot.Object, IEquatable<Signal> {
+	public abstract class Signal : Godot.Object {
 		private struct CallbackHolder {
 			public Action callback;
 		}
@@ -46,16 +47,25 @@ namespace GReact {
 				callback(props);
 			}
 
-			public override bool Equals(Signal other) {
-				if (other is SpecializedSignal<PropT> castSignal) {
-					return props.Equals(castSignal.props) && callback == castSignal.callback;
+			public override bool Equals(object other) {
+				if (other is SpecializedSignal<PropT> signal) {
+					return props.Equals(signal.props) && callback == signal.callback;
 				}
 				return false;
+			}
+
+			public override int GetHashCode() {
+				int hashCode = -16276663;
+				hashCode = hashCode * -1521134295 + NativeInstance.GetHashCode();
+				hashCode = hashCode * -1521134295 + EqualityComparer<PropT>.Default.GetHashCode(props);
+				hashCode = hashCode * -1521134295 + EqualityComparer<Action<PropT>>.Default.GetHashCode(callback);
+				return hashCode;
 			}
 		}
 
 		public abstract void Call();
-		public abstract bool Equals(Signal other);
+		public override abstract bool Equals(object other);
+		public abstract override int GetHashCode();
 
 		public static Signal New<PropT>(PropT props, Action<PropT> callback) where PropT : notnull {
 			LambdaChecker.Check(callback);
@@ -66,10 +76,20 @@ namespace GReact {
 			return new SpecializedSignal<CallbackHolder>(new CallbackHolder { callback = callback }, CallCallback);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public void Connect(Godot.Node node, string signalName, Signal? oldSignal) {
+			if (oldSignal == null || !Equals(oldSignal)) {
+				if (oldSignal != null) {
+					node.Disconnect(signalName, oldSignal, nameof(oldSignal.Call));
+				}
+				node.Connect(signalName, this, nameof(this.Call));
+			}
+		}
+
 		private static void CallCallback(CallbackHolder holder) => holder.callback();
 	}
 
-	public abstract class Signal<Arg1T> : Godot.Object, IEquatable<Signal> {
+	public abstract class Signal<Arg1T> : Godot.Object {
 		private struct CallbackHolder {
 			public Action<Arg1T> callback;
 		}
@@ -87,16 +107,25 @@ namespace GReact {
 				callback(props, arg);
 			}
 
-			public override bool Equals(Signal other) {
-				if (other is SpecializedSignal<PropT> castSignal) {
-					return props.Equals(castSignal.props) && callback == castSignal.callback;
+			public override bool Equals(object other) {
+				if (other is SpecializedSignal<PropT> signal) {
+					return props.Equals(signal.props) && callback == signal.callback;
 				}
 				return false;
+			}
+
+			public override int GetHashCode() {
+				int hashCode = -16276663;
+				hashCode = hashCode * -1521134295 + NativeInstance.GetHashCode();
+				hashCode = hashCode * -1521134295 + EqualityComparer<PropT>.Default.GetHashCode(props);
+				hashCode = hashCode * -1521134295 + EqualityComparer<Action<PropT, Arg1T>>.Default.GetHashCode(callback);
+				return hashCode;
 			}
 		}
 
 		public abstract void Call(Arg1T arg);
-		public abstract bool Equals(Signal other);
+		public override abstract bool Equals(object other);
+		public abstract override int GetHashCode();
 
 		public static Signal<Arg1T> New<PropT>(PropT props, Action<PropT, Arg1T> callback) where PropT : notnull {
 			LambdaChecker.Check(callback);
@@ -105,6 +134,16 @@ namespace GReact {
 		public static Signal<Arg1T> New(Action<Arg1T> callback) {
 			LambdaChecker.Check(callback);
 			return new SpecializedSignal<CallbackHolder>(new CallbackHolder { callback = callback }, CallCallback);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public void Connect(Godot.Node node, string signalName, Signal<Arg1T>? oldSignal) {
+			if (oldSignal == null || !Equals(oldSignal)) {
+				if (oldSignal != null) {
+					node.Disconnect(signalName, oldSignal, nameof(oldSignal.Call));
+				}
+				node.Connect(signalName, this, nameof(this.Call));
+			}
 		}
 
 		private static void CallCallback(CallbackHolder holder, Arg1T arg) => holder.callback(arg);

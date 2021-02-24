@@ -6,11 +6,9 @@ namespace GReact {
 
 	public static class BaseButtonComponent {
 		public static void CopyToNode(Godot.BaseButton control, IBaseButtonProps? oldProps, IBaseButtonProps props) {
-			ControlComponent.CopyToNode(control, props);
+			ControlComponent.CopyToNode(control, oldProps, props);
 			control.Disabled = props.disabled;
-			if (oldProps == null || !oldProps.pressed.Equals(props.pressed)) {
-				control.Connect("pressed", props.pressed, nameof(props.pressed.Call));
-			}
+			props.pressed.Connect(control, "pressed", oldProps?.pressed);
 		}
 	}
 }

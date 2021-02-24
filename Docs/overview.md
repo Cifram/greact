@@ -24,10 +24,10 @@ Components can be divided into two categories: those that directly represent a s
 
 When using GReact, you will almost exclusively be writing composite components. GReact has a collection of node components to represent Godot's built-in `Node` classes (though that collection is currently woefully incomplete, and contributions are welcome to help address this), and there's rarely a reason to write your own custom `Node` class to be managed by GReact. But, you will need to use node components all the time.
 
-By convention, node components are named as the `Node` class name followed by `Component`, such as `ButtonComponent` for the `Button` `Node` class. Also by convention, they take two arguments: a string key, and a a props struct. The props struct is a struct containing all the properties needed by that `Node` class, and by convention is named by the node class name followed by `Props`, such as `ButtonProps`. So to make a button, you'd do something like:
+By convention, node components are named as the node class name followed by `Component`, such as `ButtonComponent` for the `Button` node class. Also by convention, they take one argument: a props struct. The props struct is a struct containing all the properties needed by that `Node` class, and by convention is named by the node class name followed by `Props`, such as `ButtonProps`. So to make a button, you'd do something like:
 
 ```c#
-ButtonComponent.New("MyButton", new ButtonProps {
+ButtonComponent.New(new ButtonProps {
   vert = UIDim.JustifyCenter(20),
   horiz = UIDim.JustifyCenter(100),
   text = "Press Me!",
@@ -52,15 +52,16 @@ public struct ThingyProps {
 
 public static class ThingComponent {
   public static Element New(ThingyProps props) {
-    return HBoxContainerComponent.New($"Thingy-{props.id}", new HBoxContainerProps {
+    return HBoxContainerComponent.New(new HBoxContainerProps {
+      id = id,
       vert = UIDim.JustifyExpand(0, 0),
       horiz = UIDim.JustifyExpand(0, 0),
     }).Child(
-      LabelComponent.New($"Thingy-{props.id}-Label1", new LabelProps {
+      LabelComponent.New(new LabelProps {
         text = props.label1,
       })
     ).Child(
-      LabelComponent.New($"Thingy-{props.id}-Label2", new LabelProps {
+      LabelComponent.New(new LabelProps {
         text = props.label2,
       })
     );
@@ -70,7 +71,7 @@ public static class ThingComponent {
 
 This creates an `HBoxContainer` with two `Label`s as children. Again, the usage `UIDim` will be explained later, suffice it to say this will cause the `HBoxContainer` to expand to fill its entire parent region. Note the calls to the `Child` function on `Element`. After an element is returned by calling another component, be it a node or composite component, you can call `Child` on it, and pass in another `Element`, to add that `Element` as a child, and the `Child` method returns the original element, so you can chain these calls.
 
-A note about the key passed in to each node component: this key needs to be globally unique. This is how GReact figures out that which `Element` this frame corresponds to the same `Element` in the previous frame, even if it's in a different part of the scene graph. If two `Element`s are given the same key, it can't maintain proper consistency between frames, and thus will throw an exception.
+The `id` field passed in `HBoxContainerProps` is of special note. This is an optional integer prop available on all node components, and is used to maintain identity of the underlying node between frames. That is, a component of the same type, in the same place in the scene graph, has the same ID, then GReact assumes it refers to the same node, and updates the existing node instead of creating a new one. If you do not specify an ID, GReact will still assign IDs, sequentially from 0, for each sibling of the same type, and this is fine for most circumstances. However, if you have a list of items that can have elements added or removed in the middle, then when that happens it may not maintain identity correctly, and it's valuable to be able to specify the IDs explicitly.
 
 # Renderer and Dispatcher
 
@@ -121,7 +122,7 @@ public struct MyButtonProps {
 
 public static class MyButtonComponent {
   public static Element New(MyButtonProps props) {
-    return ButtonComponent.New($"MyButton-{id}", new ButtonProps {
+    return ButtonComponent.New(new ButtonProps {
       vert = UIDim.JustifyCenter(20),
       horiz = UIDim.JustifyCenter(100),
       text = "Press Me!",
@@ -143,10 +144,10 @@ Godot's system for manually positioning UI elements is very flexible, but it req
 
 The `UIDim` class encompasses the positioning along one axis. It stores a `startAnchor`, `endAnchor`, `startMargin` and `endMargin`, where start is left or top, and end is right or bottom, depending on whether it's horizontal or vertical. Every control takes a `UIDim vert` property and a `UIDim horiz` property. Where this saves you time and effort is through a set of static functions that serve as specialized constructors for `UIDim`:
 
-- `UIDim.Start(size)` - Justifies the control to the left or top, with the specified size. Equivalent to `UIDim.Custom(0, 0, 0, size)`.
-- `UIDim.End(size)` - Justify the control to the right or bottom, with the specified size. Equivalent to `UIDim.Custom(1, 1, -size, 0)`.
-- `UIDim.Center(size)` - Centers the control, with the specified size. Equivalent to `UIDim.Custom(0.5f, 0.5f, -size/2, size/2)`.
-- `UIDim.Expand(start, end)` - Makes the control expand to fit the container, with the specified margins at the start and end. Equivalent to `UIDim.Custom(0, 1, start, -end)`.
+- `UIDim.Start(size)` - Justifies the control to the left or top, with the specified size. Sets both anchors to 0, along with the start margin, and sets the end margin to the `size`.
+- `UIDim.End(size)` - Justify the control to the right or bottom, with the specified size. Sets both anchors to 1, the start margin to `-size`, and the end margin to 0.
+- `UIDim.Center(size)` - Centers the control, with the specified size. Sets both anchors to 0.5, the start margin to `-size/2` and the end margin to `size/2`.
+- `UIDim.Expand(start, end)` - Makes the control expand to fit the container, with the specified margins at the start and end. Sets the start anchor to 0, the end anchor to 1, the start margin to `start` and the end margin to `-end`.
 - `UIDim.Custom(startAnchor, endAnchor, startMargin, endMargin)` - Sets the values directly, for when you need to do something special.
 
 # Rules of Good GReact

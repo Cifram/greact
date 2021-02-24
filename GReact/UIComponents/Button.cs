@@ -1,14 +1,20 @@
+using System;
+
 namespace GReact {
 	public struct ButtonProps : IBaseButtonProps {
-		public bool disabled { get; set; }
-		public Signal pressed { get; set; }
+		public int? id { get; set; }
 		public UIDim vert { get; set; }
 		public UIDim horiz { get; set; }
+		public Godot.Vector2 minSize { get; set; }
+		public Godot.Control.SizeFlags sizeFlagsHoriz { get; set; }
+		public Godot.Control.SizeFlags sizeFlagsVert { get; set; }
+		public bool disabled { get; set; }
+		public Signal pressed { get; set; }
 		public string text;
 	}
 
 	public static class ButtonComponent {
-		public static Element New(string key, ButtonProps props) => Element<ButtonProps>.New(key, props, CreateNode, ModifyNode);
+		public static Element New(ButtonProps props) => Element<ButtonProps, Godot.Button>.New(props, CreateNode, ModifyNode);
 
 		public static void CopyToNode(Godot.Button control, ButtonProps? oldProps, ButtonProps props) {
 			BaseButtonComponent.CopyToNode(control, oldProps, props);

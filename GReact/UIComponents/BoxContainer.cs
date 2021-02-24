@@ -4,8 +4,8 @@ namespace GReact {
 	}
 
 	public static class BoxContainerComponent {
-		public static void CopyToNode(Godot.BoxContainer control, IBoxContainerProps props) {
-			ControlComponent.CopyToNode(control, props);
+		public static void CopyToNode(Godot.BoxContainer control, IBoxContainerProps? oldProps, IBoxContainerProps props) {
+			ControlComponent.CopyToNode(control, oldProps, props);
 			control.Alignment = props.alignment;
 		}
 	}
