@@ -70,7 +70,7 @@ namespace GReact {
 	}
 
 	public interface INodeProps {
-		int? id { get; }
+		int? id { get; set; }
 	}
 
 	public delegate Godot.Node CreateNode<PropT>(PropT props) where PropT : struct;
