@@ -33,13 +33,13 @@ namespace UIExample {
 				}).Child(
 					ButtonComponent.New(new ButtonProps {
 						text = "Add Item",
-						pressed = Signal.New(OnAddItem, props),
+						onPressed = Signal.New(OnAddItem, props),
 						sizeFlagsHoriz = Control.SizeFlags.ExpandFill,
 					})
 				).Child(
 					ButtonComponent.New(new ButtonProps {
 						text = "X",
-						pressed = props.onDelete,
+						onPressed = props.onDelete,
 					})
 				)
 			).Child(

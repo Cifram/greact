@@ -1,5 +1,3 @@
-using System;
-
 namespace GReact {
 	public struct ButtonProps : IBaseButtonProps {
 		public int? id { get; set; }
@@ -9,7 +7,7 @@ namespace GReact {
 		public Godot.Control.SizeFlags sizeFlagsHoriz { get; set; }
 		public Godot.Control.SizeFlags sizeFlagsVert { get; set; }
 		public bool disabled { get; set; }
-		public Signal pressed { get; set; }
+		public Signal onPressed { get; set; }
 		public string text;
 	}
 

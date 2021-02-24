@@ -20,7 +20,7 @@ namespace UIExample {
 			).Child(
 				ButtonComponent.New(new ButtonProps {
 					text = "X",
-					pressed = props.onDelete,
+					onPressed = props.onDelete,
 				})
 			);
 	}

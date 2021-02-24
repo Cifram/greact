@@ -12,7 +12,7 @@ namespace UIExample {
 				horiz = UIDim.Expand(0, 0),
 			});
 
-			foreach(var columnKey in props.state.columns.Keys) {
+			foreach (var columnKey in props.state.columns.Keys) {
 				root.Child(
 					ListComponent.New(new ListProps {
 						id = columnKey,
@@ -25,7 +25,7 @@ namespace UIExample {
 			root.Child(
 				ButtonComponent.New(new ButtonProps {
 					text = "New Column",
-					pressed = Signal.New(OnNewColumn, props),
+					onPressed = Signal.New(OnNewColumn, props),
 				})
 			);
 

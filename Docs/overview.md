@@ -31,7 +31,7 @@ ButtonComponent.New(new ButtonProps {
   vert = UIDim.JustifyCenter(20),
   horiz = UIDim.JustifyCenter(100),
   text = "Press Me!",
-  pressed = Signal.New(OnButtonPress),
+  onPressed = Signal.New(OnButtonPress),
 })
 ```
 
@@ -126,7 +126,7 @@ public static class MyButtonComponent {
       vert = UIDim.JustifyCenter(20),
       horiz = UIDim.JustifyCenter(100),
       text = "Press Me!",
-      pressed = Signal.New(OnButtonPress, props),
+      onPressed = Signal.New(OnButtonPress, props),
     })
   }
 
