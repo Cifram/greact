@@ -44,7 +44,7 @@ Pull requests welcome!
 
 To contribute to GReact, follow the standard GitHub process: create a fork, make your changes, and then make a pull request. It will be reviewed, and some alterations may be request, but if and when it's approved, it'll be integrated.
 
-Please follow the coding style already in use.
+Please follow the coding style already in use. Much of this can be enforced with the settings in omnisharp.json. If using VS Code, it's recommended to turn on the omnisharp auto-formatter.
 
 Any substantial new functionality or redesigns should get an issue first, so it can be opened to discussion before you put in a lot of work on it. Nothing is worse than putting a ton of work into a change only to have it refused because it's contrary to the vision of the project.
 
