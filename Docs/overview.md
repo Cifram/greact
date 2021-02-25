@@ -154,10 +154,14 @@ The `UIDim` class encompasses the positioning along one axis. It stores a `start
 
 Now that you've got the structure of GReact down, there are some very important rules to understand for any code that interacts with GReact. Breaking these rules breaks the GReact paradigm, and will tend to cause things to not function properly.
 
-## 1. Components should never read from the scene graph
+## 1. Components must not read from the scene graph
 
 The GReact paradigm means that components are given all the data they need to create their portion of the scene graph from scratch, and should always pretend they're doing that. And if you're always making an entirely new scene graph from scratch, why would you look at the old one?
+
+Note that node components do sometimes need to read some data off of the `Node` they manage. They should only ever read data off the `Node` they directly manage, only for the sake of deciding which fields to update, and only in cases where that `Node` might change in a way outside of their control. As an example, a `LineEdit` control can be directly altered by the user's keyboard input, so the `LineEditComponent` needs to check the values on the `Node` itself when deciding what to update.
 
 ## 2. Nodes managed by node components must not be modified by anything else
 
 If a node component is managing a `Node`, it needs to know it has total and sole control over that `Node`. The component is given some properties that determine the state of the `Node` it manages, and when it's done, the `Node` needs to entirely match what those properties indicate. But, it's comparing against the properties from the last frame to avoid changing things it doesn't need to. If something else has been messing with the `Node` in the meantime, some of those values may no longer be what's indicated by the old properties, and the component may not overwrite things it needs to.
+
+Note that the exception on the first rule is specifically about handling cases where something outside GReact modifies a `Node` being managed by a node component, and should help illustrate why this causes problems. It means the node component needs to be aware of all such cases and handle those properties in a special way which further breaks the normal UReact paradigm, and failure to do that specialized handling invariably creates bugs. So it's definitely preferable to avoid creating those situations in the first place.
