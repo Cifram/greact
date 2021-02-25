@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using GReact;
@@ -5,8 +7,8 @@ using GReact;
 namespace UIExample {
 	public struct ListProps {
 		public int id;
-		public Column column;
-		public Signal onDelete;
+		public List<string> list;
+		public Action<Action<State>> apply;
 	}
 
 	public static class ListComponent {
@@ -16,12 +18,12 @@ namespace UIExample {
 				sizeFlagsHoriz = Control.SizeFlags.ExpandFill,
 			});
 
-			foreach (var (name, i) in props.column.items.Select((name, i) => (name, i))) {
+			foreach (var (name, i) in props.list.Select((name, i) => (name, i))) {
 				mainList.Child(
 					ListItemComponent.New(new ListItemProps {
 						text = name,
-						onDelete = Signal.New(OnRemoveItem, (props.column, name)),
-						onChange = Signal<string>.New(OnChangeItem, (props.column, i)),
+						onDelete = Signal.New(OnRemoveItem, (i, props)),
+						onChange = Signal<string>.New(OnChangeItem, (i, props)),
 					})
 				);
 			}
@@ -41,7 +43,7 @@ namespace UIExample {
 				).Child(
 					ButtonComponent.New(new ButtonProps {
 						text = "X",
-						onPressed = props.onDelete,
+						onPressed = Signal.New(OnRemoveList, props),
 					})
 				)
 			).Child(
@@ -49,16 +51,22 @@ namespace UIExample {
 			);
 		}
 
-		private static void OnRemoveItem((Column, string) props) {
-			props.Item1.items.Remove(props.Item2);
+		private static void OnRemoveList(ListProps props) {
+			props.apply(State.RemoveList(props.id));
+		}
+
+		private static void OnRemoveItem((int, ListProps) args) {
+			var (itemIndex, props) = args;
+			props.apply(State.RemoveItemFromList(props.id, itemIndex));
 		}
 
 		private static void OnAddItem(ListProps props) {
-			props.column.items.Add("New Item");
+			props.apply(State.AddItemToList(props.id));
 		}
 
-		private static void OnChangeItem((Column, int) props, string newValue) {
-			props.Item1.items[props.Item2] = newValue;
+		private static void OnChangeItem((int, ListProps) args, string newValue) {
+			var (itemIndex, props) = args;
+			props.apply(State.ChangeItem(props.id, itemIndex, newValue));
 		}
 	}
 }

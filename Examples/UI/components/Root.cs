@@ -1,8 +1,11 @@
+using System;
+using System.Collections.Generic;
 using GReact;
 
 namespace UIExample {
 	public struct RootProps {
-		public State state;
+		public Dictionary<int, List<string>> lists;
+		public Action<Action<State>> apply;
 	}
 
 	public static class RootComponent {
@@ -12,12 +15,12 @@ namespace UIExample {
 				horiz = UIDim.Expand(0, 0),
 			});
 
-			foreach (var columnKey in props.state.columns.Keys) {
+			foreach (var listId in props.lists.Keys) {
 				root.Child(
 					ListComponent.New(new ListProps {
-						id = columnKey,
-						column = props.state.columns[columnKey],
-						onDelete = Signal.New(OnRemoveColumn, (props.state, columnKey)),
+						id = listId,
+						list = props.lists[listId],
+						apply = props.apply,
 					})
 				);
 			}
@@ -25,20 +28,15 @@ namespace UIExample {
 			root.Child(
 				ButtonComponent.New(new ButtonProps {
 					text = "New Column",
-					onPressed = Signal.New(OnNewColumn, props),
+					onPressed = Signal.New(OnAddList, props),
 				})
 			);
 
 			return root;
 		}
 
-		public static void OnNewColumn(RootProps props) {
-			props.state.columns[props.state.maxId] = new Column();
-			props.state.maxId++;
-		}
-
-		private static void OnRemoveColumn((State, int) props) {
-			props.Item1.columns.Remove(props.Item2);
+		public static void OnAddList(RootProps props) {
+			props.apply(State.AddList());
 		}
 	}
 }
