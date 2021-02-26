@@ -28,8 +28,8 @@ By convention, node components are named as the node class name followed by `Com
 
 ```c#
 ButtonComponent.New(new ButtonProps {
-  vert = UIDim.JustifyCenter(20),
-  horiz = UIDim.JustifyCenter(100),
+  vert = UIDim.Manual.Center(20),
+  horiz = UIDim.Manual.Center(100),
   text = "Press Me!",
   onPressed = Signal.New(OnButtonPress),
 })
@@ -54,8 +54,8 @@ public static class ThingComponent {
   public static Element New(ThingyProps props) {
     return HBoxContainerComponent.New(new HBoxContainerProps {
       id = id,
-      vert = UIDim.JustifyExpand(0, 0),
-      horiz = UIDim.JustifyExpand(0, 0),
+      vert = UIDim.Manual.Expand(0, 0),
+      horiz = UIDim.Manual.Expand(0, 0),
     }).Child(
       LabelComponent.New(new LabelProps {
         text = props.label1,
@@ -149,15 +149,21 @@ You'll notice the signal callback is also passed the `Node` the signal is regist
 
 # UI Positioning
 
-Godot's system for manually positioning UI elements is very flexible, but it requires specifying 8 numbers for each `Node` in the UI (an anchor value and a margin value for top, bottom, left and right), and the correct values for these numbers is sometimes hard to think about. So GReact provides some convenient shortcuts for the common use cases.
+Godot's system for manually positioning UI elements is very flexible, but it requires specifying 8 numbers for each `Node` in the UI (an anchor value and a margin value for top, bottom, left and right), and the correct values for these numbers is sometimes hard to think about. Add to this that when a control is inside a container, it has a completely different set of values to specify how it's formatted, being a set of flags for how it gets scaled and a minimum size. So GReact provides some convenient shortcuts for the common use cases.
 
-The `UIDim` class encompasses the positioning along one axis. It stores a `startAnchor`, `endAnchor`, `startMargin` and `endMargin`, where start is left or top, and end is right or bottom, depending on whether it's horizontal or vertical. Every control takes a `UIDim vert` property and a `UIDim horiz` property. Where this saves you time and effort is through a set of static functions that serve as specialized constructors for `UIDim`:
+The `UIDim` class encompasses the positioning along one axis. It has two modes: manual mode for controls not in containers, and container mode for controls in containers. If in manual mode, it stores a `startAnchor`, `endAnchor`, `startMargin` and `endMargin`, where start is left or top, and end is right or bottom, depending on whether it's horizontal or vertical. If it's in container mode, it stores a `minSize` and `sizeFlags`. Every control takes a `UIDim vert` property and a `UIDim horiz` property. Where this saves you time and effort is through a set of static functions that serve as specialized constructors for `UIDim`:
 
-- `UIDim.Start(size)` - Justifies the control to the left or top, with the specified size. Sets both anchors to 0, along with the start margin, and sets the end margin to the `size`.
-- `UIDim.End(size)` - Justify the control to the right or bottom, with the specified size. Sets both anchors to 1, the start margin to `-size`, and the end margin to 0.
-- `UIDim.Center(size)` - Centers the control, with the specified size. Sets both anchors to 0.5, the start margin to `-size/2` and the end margin to `size/2`.
-- `UIDim.Expand(start, end)` - Makes the control expand to fit the container, with the specified margins at the start and end. Sets the start anchor to 0, the end anchor to 1, the start margin to `start` and the end margin to `-end`.
-- `UIDim.Custom(startAnchor, endAnchor, startMargin, endMargin)` - Sets the values directly, for when you need to do something special.
+- `UIDim.Manual.Start(size)` - Justifies the control to the left or top, with the specified size. Sets both anchors to 0, along with the start margin, and sets the end margin to the `size`.
+- `UIDim.Manual.End(size)` - Justify the control to the right or bottom, with the specified size. Sets both anchors to 1, the start margin to `-size`, and the end margin to 0.
+- `UIDim.Manual.Center(size)` - Centers the control, with the specified size. Sets both anchors to 0.5, the start margin to `-size/2` and the end margin to `size/2`.
+- `UIDim.Manual.Expand(start, end)` - Makes the control expand to fit the container, with the specified margins at the start and end. Sets the start anchor to 0, the end anchor to 1, the start margin to `start` and the end margin to `-end`.
+- `UIDim.Manual.Custom(startAnchor, endAnchor, startMargin, endMargin)` - Sets the values directly, for when you need to do something special.
+- `UIDim.Container.Fill(minSize = 0)` - Make the control fill the entire space allocated to it, with a minimum size specified.
+- `UIDim.Container.Expand(minSize = 0)` - Makes the container allocate as much space for this control as it can, but does not expand the control to fill that space. The control will have it's size determined by it's contents, or the specified minSize, whichever is larger.
+- `UIDim.Container.ExpandFill(minSize = 0)` - Makes the container allocate as much space for this control as it can, and expands the control to fill that space, with a minimum size specified.
+- `UIDim.Container.ShrinkStart(minSize = 0)` - Shrink the control to the size of it's contents, or the specified minimum size, whichever is larger, and justifies to the top or left.
+- `UIDim.Container.ShrinkCenter(minSize = 0)` - Shrink the control to the size of it's contents, or the specified minimum size, whichever is larger, and centers it.
+- `UIDim.Container.ShrinkEnd(minSize = 0)` - Shrinks the control to the size of it's contents, or the specified minimum size, whichever is larger, and justifies it to the bottom or right.
 
 # Rules of Good GReact
 

@@ -5,9 +5,6 @@ namespace GReact {
 		public int? id { get; set; }
 		public UIDim vert { get; set; }
 		public UIDim horiz { get; set; }
-		public Vector2 minSize { get; set; }
-		public Control.SizeFlags sizeFlagsHoriz { get; set; }
-		public Control.SizeFlags sizeFlagsVert { get; set; }
 		public Signal? onReady { get; set; }
 		public string text;
 		public Signal<string>? onTextChanged;

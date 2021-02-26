@@ -2,9 +2,6 @@ namespace GReact {
 	public interface IControlProps : INodeProps {
 		UIDim vert { get; set; }
 		UIDim horiz { get; set; }
-		Godot.Vector2 minSize { get; set; }
-		Godot.Control.SizeFlags sizeFlagsHoriz { get; set; }
-		Godot.Control.SizeFlags sizeFlagsVert { get; set; }
 		Signal? onReady { get; set; }
 	}
 
@@ -12,9 +9,6 @@ namespace GReact {
 		public int? id { get; set; }
 		public UIDim vert { get; set; }
 		public UIDim horiz { get; set; }
-		public Godot.Vector2 minSize { get; set; }
-		public Godot.Control.SizeFlags sizeFlagsHoriz { get; set; }
-		public Godot.Control.SizeFlags sizeFlagsVert { get; set; }
 		public Signal? onReady { get; set; }
 	}
 
@@ -22,21 +16,28 @@ namespace GReact {
 		public static Element New(ControlProps props) => Element<ControlProps, Godot.Control>.New(props, CreateNode, ModifyNode);
 
 		public static void CopyToNode(Godot.Control control, IControlProps? oldProps, IControlProps props) {
-			if (oldProps != null && !oldProps.vert.Equals(props.vert)) {
-				control.AnchorTop = props.vert.anchorStart;
-				control.AnchorBottom = props.vert.anchorEnd;
-				control.MarginTop = props.vert.marginStart;
-				control.MarginBottom = props.vert.marginEnd;
+			if (oldProps == null || !oldProps.vert.Equals(props.vert)) {
+				if (props.vert.containerMode) {
+					control.RectMinSize = new Godot.Vector2(control.RectMinSize.x, props.vert.minSize);
+					control.SizeFlagsVertical = (int)props.vert.sizeFlags;
+				} else {
+					control.AnchorTop = props.vert.anchorStart;
+					control.AnchorBottom = props.vert.anchorEnd;
+					control.MarginTop = props.vert.marginStart;
+					control.MarginBottom = props.vert.marginEnd;
+				}
 			}
-			if (oldProps != null && !oldProps.horiz.Equals(props.horiz)) {
-				control.AnchorLeft = props.horiz.anchorStart;
-				control.AnchorRight = props.horiz.anchorEnd;
-				control.MarginLeft = props.horiz.marginStart;
-				control.MarginRight = props.horiz.marginEnd;
+			if (oldProps == null || !oldProps.horiz.Equals(props.horiz)) {
+				if (props.horiz.containerMode) {
+					control.RectMinSize = new Godot.Vector2(props.horiz.minSize, control.RectMinSize.y);
+					control.SizeFlagsHorizontal = (int)props.horiz.sizeFlags;
+				} else {
+					control.AnchorLeft = props.horiz.anchorStart;
+					control.AnchorRight = props.horiz.anchorEnd;
+					control.MarginLeft = props.horiz.marginStart;
+					control.MarginRight = props.horiz.marginEnd;
+				}
 			}
-			control.RectMinSize = props.minSize;
-			control.SizeFlagsHorizontal = (int)props.sizeFlagsHoriz;
-			control.SizeFlagsVertical = (int)props.sizeFlagsVert;
 			props.onReady?.Connect(control, "ready", oldProps?.onReady);
 		}
 

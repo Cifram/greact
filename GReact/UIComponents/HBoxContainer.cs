@@ -5,9 +5,6 @@ namespace GReact {
 		public int? id { get; set; }
 		public UIDim vert { get; set; }
 		public UIDim horiz { get; set; }
-		public Godot.Vector2 minSize { get; set; }
-		public Godot.Control.SizeFlags sizeFlagsHoriz { get; set; }
-		public Godot.Control.SizeFlags sizeFlagsVert { get; set; }
 		public Signal? onReady { get; set; }
 		public BoxContainer.AlignMode alignment { get; set; }
 	}

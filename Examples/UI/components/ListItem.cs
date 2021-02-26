@@ -11,10 +11,10 @@ namespace UIExample {
 	public static class ListItemComponent {
 		public static Element New(ListItemProps props) =>
 			HBoxContainerComponent.New(new HBoxContainerProps {
-				sizeFlagsHoriz = Control.SizeFlags.ExpandFill,
+				horiz = UIDim.Container.ExpandFill(),
 			}).Child(
 				LineEditComponent.New(new LineEditProps {
-					sizeFlagsHoriz = Control.SizeFlags.ExpandFill,
+					horiz = UIDim.Container.ExpandFill(),
 					text = props.text,
 					onTextChanged = props.onChange,
 					onReady = Signal.New(OnLineEditReady),

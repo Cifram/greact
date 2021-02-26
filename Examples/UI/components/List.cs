@@ -14,8 +14,8 @@ namespace UIExample {
 	public static class ListComponent {
 		public static Element New(ListProps props) {
 			var mainList = VBoxContainerComponent.New(new VBoxContainerProps {
-				sizeFlagsVert = Control.SizeFlags.ExpandFill,
-				sizeFlagsHoriz = Control.SizeFlags.ExpandFill,
+				vert = UIDim.Container.ExpandFill(),
+				horiz = UIDim.Container.ExpandFill(),
 			});
 
 			foreach (var (name, i) in props.list.Select((name, i) => (name, i))) {
@@ -30,15 +30,15 @@ namespace UIExample {
 
 			return VBoxContainerComponent.New(new VBoxContainerProps {
 				id = props.id,
-				minSize = new Vector2(200, 0),
+				horiz = UIDim.Container.ShrinkStart(200),
 			}).Child(
 				HBoxContainerComponent.New(new HBoxContainerProps {
-					sizeFlagsHoriz = Control.SizeFlags.ExpandFill,
+					horiz = UIDim.Container.ExpandFill(),
 				}).Child(
 					ButtonComponent.New(new ButtonProps {
+						horiz = UIDim.Container.ExpandFill(),
 						text = "Add Item",
 						onPressed = Signal.New(OnAddItem, props),
-						sizeFlagsHoriz = Control.SizeFlags.ExpandFill,
 					})
 				).Child(
 					ButtonComponent.New(new ButtonProps {
