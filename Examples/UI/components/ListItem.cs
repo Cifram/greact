@@ -17,6 +17,7 @@ namespace UIExample {
 					sizeFlagsHoriz = Control.SizeFlags.ExpandFill,
 					text = props.text,
 					onTextChanged = props.onChange,
+					onReady = Signal.New(OnLineEditReady),
 				})
 			).Child(
 				ButtonComponent.New(new ButtonProps {
@@ -24,5 +25,12 @@ namespace UIExample {
 					onPressed = props.onDelete,
 				})
 			);
+
+		public static void OnLineEditReady(Node node) {
+			if (node is LineEdit control) {
+				control.GrabFocus();
+				control.SelectAll();
+			}
+		}
 	}
 }

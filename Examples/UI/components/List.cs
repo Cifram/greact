@@ -51,20 +51,20 @@ namespace UIExample {
 			);
 		}
 
-		private static void OnRemoveList(ListProps props) {
+		private static void OnRemoveList(Node node, ListProps props) {
 			props.apply(State.RemoveList(props.id));
 		}
 
-		private static void OnRemoveItem((int, ListProps) args) {
+		private static void OnRemoveItem(Node node, (int, ListProps) args) {
 			var (itemIndex, props) = args;
 			props.apply(State.RemoveItemFromList(props.id, itemIndex));
 		}
 
-		private static void OnAddItem(ListProps props) {
+		private static void OnAddItem(Node node, ListProps props) {
 			props.apply(State.AddItemToList(props.id));
 		}
 
-		private static void OnChangeItem((int, ListProps) args, string newValue) {
+		private static void OnChangeItem(Node node, (int, ListProps) args, string newValue) {
 			var (itemIndex, props) = args;
 			props.apply(State.ChangeItem(props.id, itemIndex, newValue));
 		}

@@ -5,6 +5,7 @@ namespace GReact {
 		Godot.Vector2 minSize { get; set; }
 		Godot.Control.SizeFlags sizeFlagsHoriz { get; set; }
 		Godot.Control.SizeFlags sizeFlagsVert { get; set; }
+		Signal? onReady { get; set; }
 	}
 
 	public struct ControlProps : IControlProps {
@@ -14,6 +15,7 @@ namespace GReact {
 		public Godot.Vector2 minSize { get; set; }
 		public Godot.Control.SizeFlags sizeFlagsHoriz { get; set; }
 		public Godot.Control.SizeFlags sizeFlagsVert { get; set; }
+		public Signal? onReady { get; set; }
 	}
 
 	public static class ControlComponent {
@@ -35,6 +37,7 @@ namespace GReact {
 			control.RectMinSize = props.minSize;
 			control.SizeFlagsHorizontal = (int)props.sizeFlagsHoriz;
 			control.SizeFlagsVertical = (int)props.sizeFlagsVert;
+			props.onReady?.Connect(control, "ready", oldProps?.onReady);
 		}
 
 		private static Godot.Node CreateNode(ControlProps props) {

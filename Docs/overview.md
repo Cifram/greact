@@ -130,13 +130,22 @@ public static class MyButtonComponent {
     })
   }
 
-  private static void OnButtonPress(MyButtonProps props) {
+  private static void OnButtonPress(Node node, MyButtonProps props) {
     Godot.GD.Print($"Button response: {props.response}");
   }
 }
 ```
 
-As you see here, you can generally just reuse the component's props struct to pass on to the callback, and declare the callback as a `private static` function on the same class as your component's `New` function. So it's all much simpler in practice than it might sound in the description.
+As you see here, you can often just reuse the component's props struct to pass on to the callback, and declare the callback as a `private static` function on the same class as your component's `New` function. Sometimes you also need an ID of some sort, to specify which thing the signal is actually operating on, in which case it's convenient to use a tuple of the component's prop struct and the ID, like so:
+
+```c#
+private static void OnButtonPress(Node node, (ButtonListProps, int) args) {
+  var (props, buttonId) = args;
+  Godot.GD.Print($"Button response: {props.buttonResponses[buttonId]}");
+}
+```
+
+You'll notice the signal callback is also passed the `Node` the signal is registered on. Be very careful with this. There are cases where the only way to get the desired behavior is to have a signal directly modify the `Node` it's attached to, but this should only ever be used to interact with the aspects of the `Node` that GReact does not directly manage. A valid use for this might be grabbing focus on the `onReady` signal for a control, so it comes into existence with focus, as focus is something that GReact can't otherwise manage.
 
 # UI Positioning
 

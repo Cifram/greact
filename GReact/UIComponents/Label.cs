@@ -8,6 +8,7 @@ namespace GReact {
 		public Vector2 minSize { get; set; }
 		public Control.SizeFlags sizeFlagsHoriz { get; set; }
 		public Control.SizeFlags sizeFlagsVert { get; set; }
+		public Signal? onReady { get; set; }
 		public string text;
 	}
 

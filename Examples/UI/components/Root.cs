@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Godot;
 using GReact;
 
 namespace UIExample {
@@ -35,7 +36,7 @@ namespace UIExample {
 			return root;
 		}
 
-		public static void OnAddList(RootProps props) {
+		public static void OnAddList(Node node, RootProps props) {
 			props.apply(State.AddList());
 		}
 	}

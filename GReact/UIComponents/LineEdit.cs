@@ -2,12 +2,13 @@ using Godot;
 
 namespace GReact {
 	public struct LineEditProps : IControlProps {
+		public int? id { get; set; }
 		public UIDim vert { get; set; }
 		public UIDim horiz { get; set; }
 		public Vector2 minSize { get; set; }
 		public Control.SizeFlags sizeFlagsHoriz { get; set; }
 		public Control.SizeFlags sizeFlagsVert { get; set; }
-		public int? id { get; set; }
+		public Signal? onReady { get; set; }
 		public string text;
 		public Signal<string>? onTextChanged;
 		public Signal<string>? onTextEntered;
