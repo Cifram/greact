@@ -1,5 +1,3 @@
-using Godot;
-
 namespace GReact {
 	public struct LabelProps : IControlProps {
 		public int? id { get; set; }

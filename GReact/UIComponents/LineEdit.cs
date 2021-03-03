@@ -1,5 +1,3 @@
-using Godot;
-
 namespace GReact {
 	public struct LineEditProps : IControlProps {
 		public int? id { get; set; }

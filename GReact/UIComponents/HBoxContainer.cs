@@ -1,12 +1,10 @@
-using Godot;
-
 namespace GReact {
 	public struct HBoxContainerProps : IBoxContainerProps {
 		public int? id { get; set; }
 		public UIDim vert { get; set; }
 		public UIDim horiz { get; set; }
 		public Signal? onReady { get; set; }
-		public BoxContainer.AlignMode alignment { get; set; }
+		public Godot.BoxContainer.AlignMode alignment { get; set; }
 	}
 
 	public static class HBoxContainerComponent {
