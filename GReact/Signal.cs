@@ -29,7 +29,7 @@ namespace GReact {
 			}
 		}
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private static void CheckTarget(object target) {
+		private static void CheckTarget(object? target) {
 			if (target != null && Attribute.IsDefined(target.GetType(), typeof(CompilerGeneratedAttribute))) {
 				Godot.GD.PushWarning("This GReact signal was created with a lambda expression. This will cause performance issues, as the lambda will be recreated every frame, and thus always compare as unequal with the lambda from the previous frame, causing it to reconnect the signal every frame. It is recommended to use a static function instead, and pass anything you would close over using the props argument.");
 			}
@@ -59,7 +59,7 @@ namespace GReact {
 				callback(node, props);
 			}
 
-			public override bool Equals(object other) {
+			public override bool Equals(object? other) {
 				if (other is SpecializedSignal<PropT> signal) {
 					return props.Equals(signal.props) && callback == signal.callback;
 				}
@@ -76,7 +76,7 @@ namespace GReact {
 		}
 
 		public abstract void Call();
-		public override abstract bool Equals(object other);
+		public override abstract bool Equals(object? other);
 		public abstract override int GetHashCode();
 
 		public static Signal New<PropT>(Action<Godot.Node, PropT> callback, PropT props) where PropT : notnull {
@@ -124,7 +124,7 @@ namespace GReact {
 				}
 				callback(node, props, arg);
 			}
-			public override bool Equals(object other) {
+			public override bool Equals(object? other) {
 				if (other is SpecializedSignal<PropT> signal) {
 					return props.Equals(signal.props) && callback == signal.callback;
 				}
@@ -141,7 +141,7 @@ namespace GReact {
 		}
 
 		protected abstract void Call(Arg1T arg);
-		public override abstract bool Equals(object other);
+		public override abstract bool Equals(object? other);
 		public abstract override int GetHashCode();
 
 		public static Signal<Arg1T> New<PropT>(Action<Godot.Node, PropT, Arg1T> callback, PropT props) where PropT : notnull {
