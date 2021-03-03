@@ -29,7 +29,7 @@ namespace UIExample {
 			root.Child(
 				ButtonComponent.New(new ButtonProps {
 					vert = UIDim.Container.ShrinkStart(),
-					text = "New Column",
+					text = "New List",
 					onPressed = Signal.New(OnAddList, props),
 				})
 			);
