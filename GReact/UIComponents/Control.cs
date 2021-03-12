@@ -5,20 +5,21 @@ namespace GReact {
 		Signal? onReady { get; set; }
 	}
 
-	public struct ControlProps : IControlProps {
-		public int? id { get; set; }
-		public UIDim vert { get; set; }
-		public UIDim horiz { get; set; }
-		public Signal? onReady { get; set; }
-	}
-
+	[Component]
 	public static class ControlComponent {
-		public static Element New(ControlProps props) => Element<ControlProps, Godot.Control>.New(props, CreateNode, ModifyNode);
+		public struct Props : IControlProps {
+			public int? id { get; set; }
+			public UIDim vert { get; set; }
+			public UIDim horiz { get; set; }
+			public Signal? onReady { get; set; }
+		}
+
+		public static Element New(Props props) => Element<Props, Godot.Control>.New(props, CreateNode, ModifyNode);
 
 		public static void CopyToNode(Godot.Control control, IControlProps? oldProps, IControlProps props) {
 			if (oldProps == null || !oldProps.vert.Equals(props.vert)) {
 				if (props.vert.containerMode) {
-					control.RectMinSize = new Godot.Vector2(control.RectMinSize.x, props.vert.minSize);
+					control.RectMinSize = new(control.RectMinSize.x, props.vert.minSize);
 					control.SizeFlagsVertical = (int)props.vert.sizeFlags;
 				} else {
 					control.AnchorTop = props.vert.anchorStart;
@@ -29,7 +30,7 @@ namespace GReact {
 			}
 			if (oldProps == null || !oldProps.horiz.Equals(props.horiz)) {
 				if (props.horiz.containerMode) {
-					control.RectMinSize = new Godot.Vector2(props.horiz.minSize, control.RectMinSize.y);
+					control.RectMinSize = new(props.horiz.minSize, control.RectMinSize.y);
 					control.SizeFlagsHorizontal = (int)props.horiz.sizeFlags;
 				} else {
 					control.AnchorLeft = props.horiz.anchorStart;
@@ -41,13 +42,13 @@ namespace GReact {
 			props.onReady?.Connect(control, "ready", oldProps?.onReady);
 		}
 
-		private static Godot.Node CreateNode(ControlProps props) {
+		private static Godot.Node CreateNode(Props props) {
 			var control = new Godot.Control();
 			CopyToNode(control, null, props);
 			return control;
 		}
 
-		private static void ModifyNode(Godot.Node node, ControlProps oldProps, ControlProps props) {
+		private static void ModifyNode(Godot.Node node, Props oldProps, Props props) {
 			if (!oldProps.Equals(props) && node is Godot.Control control) {
 				CopyToNode(control, oldProps, props);
 			}

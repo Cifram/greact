@@ -1,0 +1,13 @@
+{
+	"editor.formatOnSave": true,
+	"editor.formatOnPaste": true,
+	"editor.insertSpaces": false,
+	"files.exclude": {
+		"**/.DS_Store": true,
+		"**/.git": true,
+		"**/.gitmodules": true,
+		"**/*.suo": true,
+		"**/*.dll": true,
+		"**/*.exe": true,
+	}
+}

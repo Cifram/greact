@@ -78,6 +78,7 @@ namespace GReact {
 
 	public interface Element {
 		Element Child(Element child);
+		Element Children(params Element[] children);
 		int? id { get; }
 		Type nodeType { get; }
 		PopulatedElement Render(PopulatedElement? old);
@@ -98,7 +99,7 @@ namespace GReact {
 				id = props.id,
 				createNode = createNode,
 				modifyNode = modifyNode,
-				children = new List<Element>(),
+				children = new(),
 			};
 
 		public Element Child(Element child) {
@@ -106,14 +107,19 @@ namespace GReact {
 			return this;
 		}
 
+		public Element Children(params Element[] children) {
+			this.children.AddRange(children);
+			return this;
+		}
+
 		public PopulatedElement Render(PopulatedElement? old) {
 			if (old == null) {
 				var node = createNode(props);
-				return new PopulatedElement(this, node);
+				return new(this, node);
 			} else {
 				if (old.Value.elem is Element<PropT, NodeT> oldElem) {
 					modifyNode(old.Value.node, oldElem.props, props);
-					return new PopulatedElement(this, old.Value.node);
+					return new(this, old.Value.node);
 				} else {
 					throw new Exception("Node somehow changed type while maintaining the same key");
 				}
@@ -130,8 +136,8 @@ namespace GReact {
 		public PopulatedElement(Element element, Godot.Node node) {
 			this.elem = element;
 			this.node = node;
-			this.children = new Dictionary<(Type, int), PopulatedElement>();
-			this.maxChildIds = new Dictionary<Type, int>();
+			this.children = new();
+			this.maxChildIds = new();
 		}
 
 		public int GetNextId(Type type, int? explicitId) {
@@ -150,4 +156,7 @@ namespace GReact {
 			}
 		}
 	}
+
+	[AttributeUsage(AttributeTargets.Class)]
+	public class ComponentAttribute : Attribute { }
 }

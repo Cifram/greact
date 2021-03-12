@@ -5,66 +5,55 @@ using Godot;
 using GReact;
 
 namespace UIExample {
-	public struct ListProps {
-		public int id;
-		public List<string> list;
-		public Action<Action<State>> apply;
-	}
-
+	[Component]
 	public static class ListComponent {
-		public static Element New(ListProps props) {
-			var mainList = VBoxContainerComponent.New(new VBoxContainerProps {
-				vert = UIDim.Container.ExpandFill(),
-				horiz = UIDim.Container.ExpandFill(),
-			});
-
-			foreach (var (name, i) in props.list.Select((name, i) => (name, i))) {
-				mainList.Child(
-					ListItemComponent.New(new ListItemProps {
-						text = name,
-						onDelete = Signal.New(OnRemoveItem, (i, props)),
-						onChange = Signal<string>.New(OnChangeItem, (i, props)),
-					})
-				);
-			}
-
-			return VBoxContainerComponent.New(new VBoxContainerProps {
-				id = props.id,
-				horiz = UIDim.Container.ShrinkStart(200),
-			}).Child(
-				HBoxContainerComponent.New(new HBoxContainerProps {
-					horiz = UIDim.Container.ExpandFill(),
-				}).Child(
-					ButtonComponent.New(new ButtonProps {
-						horiz = UIDim.Container.ExpandFill(),
-						text = "Add Item",
-						onPressed = Signal.New(OnAddItem, props),
-					})
-				).Child(
-					ButtonComponent.New(new ButtonProps {
-						text = "X",
-						onPressed = Signal.New(OnRemoveList, props),
-					})
-				)
-			).Child(
-				mainList
-			);
+		public struct Props {
+			public int id;
+			public List<string> list;
+			public Action<Action<State>> apply;
 		}
 
-		private static void OnRemoveList(Node node, ListProps props) {
+		public static Element New(Props props) =>
+			Component.VBoxContainer(
+				id: props.id,
+				horiz: UIDim.Container.ShrinkStart(200)
+			).Children(
+				Component.HBoxContainer(
+					horiz: UIDim.Container.ExpandFill()
+				).Children(
+					Component.Button(
+						horiz: UIDim.Container.ExpandFill(),
+						text: "Add Item",
+						onPressed: Signal.New(OnAddItem, props)
+					),
+					Component.Button(text: "X", onPressed: Signal.New(OnRemoveList, props))
+				),
+				Component.VBoxContainer(
+					vert: UIDim.Container.ExpandFill(),
+					horiz: UIDim.Container.ExpandFill()
+				).Children(
+					props.list.Select((name, i) => Component.ListItem(
+						text: name,
+						onDelete: Signal.New(OnRemoveItem, (i, props)),
+						onChange: Signal<string>.New(OnChangeItem, (i, props))
+					)).ToArray()
+				)
+			);
+
+		private static void OnRemoveList(Node node, Props props) {
 			props.apply(State.RemoveList(props.id));
 		}
 
-		private static void OnRemoveItem(Node node, (int, ListProps) args) {
+		private static void OnRemoveItem(Node node, (int, Props) args) {
 			var (itemIndex, props) = args;
 			props.apply(State.RemoveItemFromList(props.id, itemIndex));
 		}
 
-		private static void OnAddItem(Node node, ListProps props) {
+		private static void OnAddItem(Node node, Props props) {
 			props.apply(State.AddItemToList(props.id));
 		}
 
-		private static void OnChangeItem(Node node, (int, ListProps) args, string newValue) {
+		private static void OnChangeItem(Node node, (int, Props) args, string newValue) {
 			var (itemIndex, props) = args;
 			props.apply(State.ChangeItem(props.id, itemIndex, newValue));
 		}

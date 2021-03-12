@@ -2,6 +2,8 @@
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GReact", "GReact.csproj", "{DF11D703-B5B4-4739-AB06-C274BCF5BCE3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GReactGenerator", "GReactGenerator/GReactGenerator.csproj", "{1BEBA83A-4F8B-4332-8E3B-38CD72F6A195}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 	Debug|Any CPU = Debug|Any CPU
@@ -15,5 +17,11 @@ Global
 		{DF11D703-B5B4-4739-AB06-C274BCF5BCE3}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
 		{DF11D703-B5B4-4739-AB06-C274BCF5BCE3}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
 		{DF11D703-B5B4-4739-AB06-C274BCF5BCE3}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+		{1BEBA83A-4F8B-4332-8E3B-38CD72F6A195}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BEBA83A-4F8B-4332-8E3B-38CD72F6A195}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BEBA83A-4F8B-4332-8E3B-38CD72F6A195}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{1BEBA83A-4F8B-4332-8E3B-38CD72F6A195}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{1BEBA83A-4F8B-4332-8E3B-38CD72F6A195}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{1BEBA83A-4F8B-4332-8E3B-38CD72F6A195}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
 	EndGlobalSection
 EndGlobal

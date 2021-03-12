@@ -5,5 +5,11 @@
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
+    <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="GReact/**/*.cs" />
+    <Compile Include="Examples/**/*.cs" />
+    <Analyzer Include="GReact/GReactGenerator.dll" />
+  </ItemGroup>
 </Project>

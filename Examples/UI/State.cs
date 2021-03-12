@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace UIExample {
 	public class State {
-		public Dictionary<int, List<string>> lists = new Dictionary<int, List<string>>();
+		public Dictionary<int, List<string>> lists = new();
 		public int nextId = 0;
 
 		public void Apply(Action<State> action) {
@@ -11,7 +11,7 @@ namespace UIExample {
 		}
 
 		public static Action<State> AddList() => state => {
-			state.lists[state.nextId] = new List<string>();
+			state.lists[state.nextId] = new();
 			state.nextId++;
 		};
 

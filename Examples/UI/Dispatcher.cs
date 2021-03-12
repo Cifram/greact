@@ -1,7 +1,7 @@
 namespace UIExample {
 	public class Dispatcher : Godot.Node {
-		private State state = new State();
-		private GReact.Renderer renderer = new GReact.Renderer();
+		private State state = new();
+		private GReact.Renderer renderer = new();
 
 		public override void _Ready() {
 			renderer.trackNodeChurn = true;
@@ -9,7 +9,7 @@ namespace UIExample {
 		}
 
 		public override void _Process(float delta) {
-			renderer.Render(this, RootComponent.New(new RootProps { lists = state.lists, apply = state.Apply }));
+			renderer.Render(this, GReact.Component.Root(lists: state.lists, apply: state.Apply));
 			if (renderer.nodesCreated != 0 || renderer.nodesDestroyed != 0) {
 				Godot.GD.Print($"{renderer.nodesCreated} nodes created and {renderer.nodesDestroyed} destroyed");
 			}
