@@ -8,10 +8,10 @@ namespace GReact {
 	[Component]
 	public static class ControlComponent {
 		public struct Props : IControlProps {
-			public int? id { get; set; }
-			public UIDim vert { get; set; }
-			public UIDim horiz { get; set; }
-			public Signal? onReady { get; set; }
+			[Optional] public int? id { get; set; }
+			[Optional] public UIDim vert { get; set; }
+			[Optional] public UIDim horiz { get; set; }
+			[Optional] public Signal? onReady { get; set; }
 		}
 
 		public static Element New(Props props) => Element<Props, Godot.Control>.New(props, CreateNode, ModifyNode);

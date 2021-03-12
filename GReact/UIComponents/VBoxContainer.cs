@@ -2,11 +2,11 @@ namespace GReact {
 	[Component]
 	public static class VBoxContainerComponent {
 		public struct Props : IBoxContainerProps {
-			public int? id { get; set; }
-			public UIDim vert { get; set; }
-			public UIDim horiz { get; set; }
-			public Signal? onReady { get; set; }
-			public Godot.BoxContainer.AlignMode alignment { get; set; }
+			[Optional] public int? id { get; set; }
+			[Optional] public UIDim vert { get; set; }
+			[Optional] public UIDim horiz { get; set; }
+			[Optional] public Signal? onReady { get; set; }
+			[Optional] public Godot.BoxContainer.AlignMode alignment { get; set; }
 		}
 
 		public static Element New(Props props) =>

@@ -3,13 +3,13 @@ namespace GReact {
 	[Component]
 	public static class ButtonComponent {
 		public struct Props : IBaseButtonProps {
-			public int? id { get; set; }
-			public UIDim vert { get; set; }
-			public UIDim horiz { get; set; }
-			public Signal? onReady { get; set; }
-			public bool disabled { get; set; }
-			public Signal? onPressed { get; set; }
-			public string text;
+			[Optional] public int? id { get; set; }
+			[Optional] public UIDim vert { get; set; }
+			[Optional] public UIDim horiz { get; set; }
+			[Optional] public Signal? onReady { get; set; }
+			[Optional] public bool disabled { get; set; }
+			[Optional] public Signal? onPressed { get; set; }
+			[Optional] public string text;
 		}
 
 		public static Element New(Props props) => Element<Props, Godot.Button>.New(props, CreateNode, ModifyNode);

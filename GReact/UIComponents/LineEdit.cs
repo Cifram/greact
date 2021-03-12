@@ -2,13 +2,13 @@ namespace GReact {
 	[Component]
 	public static class LineEditComponent {
 		public struct Props : IControlProps {
-			public int? id { get; set; }
-			public UIDim vert { get; set; }
-			public UIDim horiz { get; set; }
-			public Signal? onReady { get; set; }
-			public string text;
-			public Signal<string>? onTextChanged;
-			public Signal<string>? onTextEntered;
+			[Optional] public int? id { get; set; }
+			[Optional] public UIDim vert { get; set; }
+			[Optional] public UIDim horiz { get; set; }
+			[Optional] public Signal? onReady { get; set; }
+			[Optional] public string text;
+			[Optional] public Signal<string>? onTextChanged;
+			[Optional] public Signal<string>? onTextEntered;
 		}
 
 		public static Element New(Props props) => Element<Props, Godot.LineEdit>.New(props, CreateNode, ModifyNode);
