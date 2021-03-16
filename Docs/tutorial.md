@@ -592,10 +592,10 @@ public static class ListComponent {
       )
     ).Children(
       props.list.Select(name =>
-				props.list.Select((name, i) => Component.ListItem(
-					text: name,
-					onDelete: Signal.New(OnRemoveItem, (i, props)),
-				)).ToArray()
+        props.list.Select((name, i) => Component.ListItem(
+          text: name,
+          onDelete: Signal.New(OnRemoveItem, (i, props)),
+        )).ToArray()
       ).ToArray()
     );
 
