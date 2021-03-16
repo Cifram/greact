@@ -119,7 +119,10 @@ And that should do it!
 
 # How to Use GReact
 
-See the [Overview](Docs/overview.md), which gives a high level, but fairly complete, description of how GReact works and how you should use it.
+See these documents for more info:
+
+- [Tutorial](Docs/tutorial.md) - A tutorial for how to build a UI with GReact, which covers most of the important functionality.
+- [Overview](Docs/overview.md) - A high level, but fairly complete, description of how GReact works and how you should use it.
 
 # Contributing
 
