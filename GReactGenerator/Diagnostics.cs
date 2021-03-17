@@ -26,7 +26,7 @@ public static class Diagnostics {
 				DiagComponentLacksPropsStruct = new DiagnosticDescriptor(
 					id: "GR0002",
 					title: "GReact Components must contain a struct called Props",
-					messageFormat: "GReact Component class {0} does not contain a Struct called Props.",
+					messageFormat: "GReact Component class {0} does not contain a struct called Props.",
 					category: "GReact.Generation",
 					defaultSeverity: DiagnosticSeverity.Error,
 					isEnabledByDefault: true
@@ -60,7 +60,7 @@ public static class Diagnostics {
 				DiagComponentPropsNotAStruct = new DiagnosticDescriptor(
 					id: "GR0004",
 					title: "Props for GReact Components must not be a struct",
-					messageFormat: $"Props for GReact Component class {0} is a {1}, not a {TypeKind.Struct}.",
+					messageFormat: "Props for GReact Component class {0} is a {1}, not a Struct.",
 					category: "GReact.Generation",
 					defaultSeverity: DiagnosticSeverity.Error,
 					isEnabledByDefault: true
