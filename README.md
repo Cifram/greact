@@ -71,9 +71,9 @@ Copy the `GReact` directory from this repo into your Godot project. It can go wh
 
 In order for the GReact source generators to work, it needs some custom things, in the `.csproj` file for your project. If Godot is auto-updating the project file, it will overwrite these changes. Also, Godot often does a poor job of keeping the C# files in your project properly up to date, so it's a good idea to do this anyway.
 
-First, make sure you've created at least one C# script in your project. It can be an empty script that you delete immediate, but this informs Godot that you're using C#. Otherwise, the Mono project settings do not appear.
+First, make sure you've created at least one C# script in your project. It can be an empty script that you delete immediately, but this informs Godot that you're using C#. Otherwise, the Mono project settings do not appear.
 
-Next, in the Godot editor, go to the "Project" menu, and select "Project Settings...", and under the "Mono" header select "Project", and make sure the option "Auto Update Project" is toggled off.
+Next, in the Godot editor, go to the "Project" menu, select "Project Settings...", under the "Mono" header select "Project", and make sure the option "Auto Update Project" is toggled off.
 
 ## 3. Update csproj file
 
