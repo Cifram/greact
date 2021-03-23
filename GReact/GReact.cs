@@ -53,9 +53,11 @@ namespace GReact {
 			nodesCreated = 0;
 			nodesDestroyed = 0;
 
-			var popElem = Render(null, 0, oldRootElem, elem);
-			if (oldRootElem == null) {
+			var popElem = elem.nodeType == oldRootElem?.elem.nodeType ?
+				Render(null, 0, oldRootElem, elem) : Render(null, 0, null, elem);
+			if (oldRootElem?.node != popElem.node) {
 				parent.AddChild(popElem.node);
+				oldRootElem?.node.QueueFree();
 			}
 			oldRootElem = popElem;
 		}
@@ -121,7 +123,7 @@ namespace GReact {
 					modifyNode(old.Value.node, oldElem.props, props);
 					return new(this, old.Value.node);
 				} else {
-					throw new Exception("Node somehow changed type while maintaining the same key");
+					throw new Exception($"Node {old.Value.node.Name} of type {old.Value.node.GetType()} somehow changed type while maintaining the same key");
 				}
 			}
 		}
