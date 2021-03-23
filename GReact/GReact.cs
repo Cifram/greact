@@ -62,6 +62,10 @@ namespace GReact {
 			oldRootElem = popElem;
 		}
 
+		public void Cleanup() {
+			oldRootElem?.node.QueueFree();
+		}
+
 		private int GetNodeHierarchySize(Godot.Node node) {
 			var size = 1;
 			for (int i = 0; i < node.GetChildCount(); i++) {
