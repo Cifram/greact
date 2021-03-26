@@ -1,3 +1,5 @@
+using System;
+
 namespace GReact {
 	[Component]
 	public static class HBoxContainerComponent {
@@ -5,7 +7,7 @@ namespace GReact {
 			[Optional] public int? id { get; set; }
 			[Optional] public UIDim vert { get; set; }
 			[Optional] public UIDim horiz { get; set; }
-			[Optional] public Signal? onReady { get; set; }
+			[Optional] [Signal("ready")] public Action<Godot.Node>? onReady { get; set; }
 			[Optional] public Godot.BoxContainer.AlignMode alignment { get; set; }
 		}
 
@@ -19,12 +21,14 @@ namespace GReact {
 		private static Godot.Node CreateNode(Props props) {
 			var control = new Godot.HBoxContainer();
 			CopyToNode(control, null, props);
+			Component.RegisterHBoxContainerSignals(control, props);
 			return control;
 		}
 
 		private static void ModifyNode(Godot.Node node, Props oldProps, Props props) {
 			if (!oldProps.Equals(props) && node is Godot.HBoxContainer control) {
 				CopyToNode(control, oldProps, props);
+				Component.RegisterHBoxContainerSignals(control, props);
 			}
 		}
 	}

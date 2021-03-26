@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Godot;
 using GReact;
 
 namespace UIExample {
@@ -28,12 +27,8 @@ namespace UIExample {
 				Component.Button(
 					vert: UIDim.Container.ShrinkStart(),
 					text: "New List",
-					onPressed: Signal.New(OnAddList, props)
+					onPressed: node => props.apply(State.AddList())
 				)
 			);
-
-		public static void OnAddList(Node node, Props props) {
-			props.apply(State.AddList());
-		}
 	}
 }

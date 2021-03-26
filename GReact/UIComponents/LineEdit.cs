@@ -1,3 +1,5 @@
+using System;
+
 namespace GReact {
 	[Component]
 	public static class LineEditComponent {
@@ -5,10 +7,10 @@ namespace GReact {
 			[Optional] public int? id { get; set; }
 			[Optional] public UIDim vert { get; set; }
 			[Optional] public UIDim horiz { get; set; }
-			[Optional] public Signal? onReady { get; set; }
-			[Optional] public string text;
-			[Optional] public Signal<string>? onTextChanged;
-			[Optional] public Signal<string>? onTextEntered;
+			[Optional] [Signal("ready")] public Action<Godot.Node>? onReady { get; set; }
+			[Optional] public string? text;
+			[Optional] [Signal("text_changed")] public Action<Godot.Node, string>? onTextChanged;
+			[Optional] [Signal("text_entered")] public Action<Godot.Node, string>? onTextEntered;
 		}
 
 		public static Element New(Props props) => Element<Props, Godot.LineEdit>.New(props, CreateNode, ModifyNode);
@@ -18,19 +20,19 @@ namespace GReact {
 			if (control.Text != props.text) {
 				control.Text = props.text;
 			}
-			props.onTextChanged?.Connect(control, "text_changed", oldProps?.onTextChanged);
-			props.onTextEntered?.Connect(control, "text_entered", oldProps?.onTextEntered);
 		}
 
 		private static Godot.Node CreateNode(Props props) {
 			var control = new Godot.LineEdit();
 			CopyToNode(control, null, props);
+			Component.RegisterLineEditSignals(control, props);
 			return control;
 		}
 
 		private static void ModifyNode(Godot.Node node, Props oldProps, Props props) {
 			if (!oldProps.Equals(props) && node is Godot.LineEdit control) {
 				CopyToNode(control, oldProps, props);
+				Component.RegisterLineEditSignals(control, props);
 			}
 		}
 	}

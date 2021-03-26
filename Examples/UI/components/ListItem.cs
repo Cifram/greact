@@ -1,4 +1,4 @@
-using Godot;
+using System;
 using GReact;
 
 namespace UIExample {
@@ -6,8 +6,8 @@ namespace UIExample {
 	public static class ListItemComponent {
 		public struct Props {
 			public string text;
-			public Signal onDelete;
-			public Signal<string> onChange;
+			public Action<Godot.Node> onDelete;
+			public Action<Godot.Node, string> onChange;
 		}
 
 		public static Element New(Props props) =>
@@ -18,19 +18,17 @@ namespace UIExample {
 					horiz: UIDim.Container.ExpandFill(),
 					text: props.text,
 					onTextChanged: props.onChange,
-					onReady: Signal.New(OnLineEditReady)
+					onReady: node => {
+						if (node is Godot.LineEdit control) {
+							control.GrabFocus();
+							control.SelectAll();
+						}
+					}
 				),
 				Component.Button(
 					text: "X",
 					onPressed: props.onDelete
 				)
 			);
-
-		public static void OnLineEditReady(Node node) {
-			if (node is LineEdit control) {
-				control.GrabFocus();
-				control.SelectAll();
-			}
-		}
 	}
 }

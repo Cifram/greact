@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace GReact {
 	public class Renderer {
+		public static Dictionary<ulong, Godot.Object> signalObjects = new();
+
 		private PopulatedElement? oldRootElem;
 		public int nodesCreated { get; private set; }
 		public int nodesDestroyed { get; private set; }
@@ -165,6 +167,13 @@ namespace GReact {
 
 	[AttributeUsage(AttributeTargets.Class)]
 	public class ComponentAttribute : Attribute { }
+
+	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+	public class SignalAttribute : Attribute {
+		private string signal;
+
+		public SignalAttribute(string signal) => this.signal = signal;
+	}
 
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 	public class OptionalAttribute : Attribute { }

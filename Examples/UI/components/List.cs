@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Godot;
 using GReact;
 
 namespace UIExample {
@@ -24,32 +23,19 @@ namespace UIExample {
 					Component.Button(
 						horiz: UIDim.Container.ExpandFill(),
 						text: "Add Item",
-						onPressed: Signal.New(OnAddItem, props)
+						onPressed: node => props.apply(State.AddItemToList(props.id))
 					),
-					Component.Button(text: "X", onPressed: Signal.New(OnRemoveList, props))
+					Component.Button(
+						text: "X",
+						onPressed: node => props.apply(State.RemoveList(props.id))
+					)
 				)
 			).Children(
 				props.list.Select((name, i) => Component.ListItem(
 					text: name,
-					onDelete: Signal.New(OnRemoveItem, (i, props)),
-					onChange: Signal<string>.New(OnChangeItem, (i, props))
+					onDelete: node => props.apply(State.RemoveItemFromList(props.id, i)),
+					onChange: (node, str) => props.apply(State.ChangeItem(props.id, i, str))
 				)).ToArray()
 			);
-
-		private static void OnRemoveList(Node node, Props props) {
-			props.apply(State.RemoveList(props.id));
-		}
-
-		private static void OnRemoveItem(Node node, (int itemIndex, Props props) args) {
-			args.props.apply(State.RemoveItemFromList(args.props.id, args.itemIndex));
-		}
-
-		private static void OnAddItem(Node node, Props props) {
-			props.apply(State.AddItemToList(props.id));
-		}
-
-		private static void OnChangeItem(Node node, (int itemIndex, Props props) args, string newValue) {
-			args.props.apply(State.ChangeItem(args.props.id, args.itemIndex, newValue));
-		}
 	}
 }

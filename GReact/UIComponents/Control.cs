@@ -1,8 +1,10 @@
+using System;
+
 namespace GReact {
 	public interface IControlProps : INodeProps {
 		UIDim vert { get; set; }
 		UIDim horiz { get; set; }
-		Signal? onReady { get; set; }
+		Action<Godot.Node>? onReady { get; set; }
 	}
 
 	[Component]
@@ -11,7 +13,7 @@ namespace GReact {
 			[Optional] public int? id { get; set; }
 			[Optional] public UIDim vert { get; set; }
 			[Optional] public UIDim horiz { get; set; }
-			[Optional] public Signal? onReady { get; set; }
+			[Optional] [Signal("ready")] public Action<Godot.Node>? onReady { get; set; }
 		}
 
 		public static Element New(Props props) => Element<Props, Godot.Control>.New(props, CreateNode, ModifyNode);
@@ -39,18 +41,19 @@ namespace GReact {
 					control.MarginRight = props.horiz.marginEnd;
 				}
 			}
-			props.onReady?.Connect(control, "ready", oldProps?.onReady);
 		}
 
 		private static Godot.Node CreateNode(Props props) {
 			var control = new Godot.Control();
 			CopyToNode(control, null, props);
+			Component.RegisterControlSignals(control, props);
 			return control;
 		}
 
 		private static void ModifyNode(Godot.Node node, Props oldProps, Props props) {
 			if (!oldProps.Equals(props) && node is Godot.Control control) {
 				CopyToNode(control, oldProps, props);
+				Component.RegisterControlSignals(control, props);
 			}
 		}
 	}
