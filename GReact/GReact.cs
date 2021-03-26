@@ -38,7 +38,13 @@ namespace GReact {
 					if (trackNodeChurn) {
 						nodesDestroyed += GetNodeHierarchySize(oldPopElem.Value.children[key].node);
 					}
-					oldPopElem.Value.children[key].node.QueueFree();
+					var node = oldPopElem.Value.children[key].node;
+					var nodeId = node.GetInstanceId();
+					node.QueueFree();
+					if (signalObjects.ContainsKey(nodeId)) {
+						signalObjects[nodeId].Free();
+						signalObjects.Remove(nodeId);
+					}
 				}
 
 				for (int i = 0; i < orderedChildren.Count; i++) {
